@@ -36,13 +36,15 @@ public class SSH {
             try {                                                   //TODO
                 jschSSHChannel.setKnownHosts("");
             } catch (JSchException jschX) {
-                logError(jschX.getMessage());
+                JTerm.out.println(TextColor.INFO,jschX.getMessage());
             }
 
-            String errorMessage = SSH.connect();
+            String errorMessage = SSH.connect();                    //connection established
             if (errorMessage != null) {
                 JTerm.out.println(TextColor.INFO,errorMessage);
             }
+
+
 
         }catch (IOException e){     //handle exception TODO
 
@@ -58,21 +60,11 @@ public class SSH {
             sesConnection = jschSSHChannel.getSession(strUserName,
                     strConnectionIP, intConnectionPort);
             sesConnection.setPassword(strPassword);
-            // UNCOMMENT THIS FOR TESTING PURPOSES, BUT DO NOT USE IN PRODUCTION
             sesConnection.setConfig("StrictHostKeyChecking", "no");
             sesConnection.connect(60000);
 
         } catch (JSchException jschX) {
             errorMessage = jschX.getMessage();
-        }
-
-        return errorMessage;
-    }
-
-    private static String logError(String errorMessage) {
-        if (errorMessage != null) {
-            LOGGER.log(Level.SEVERE, "{0}:{1} - {2}",
-                    new Object[]{strConnectionIP, intConnectionPort, errorMessage});
         }
 
         return errorMessage;
